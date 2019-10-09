@@ -6,8 +6,8 @@ EXCEPTIONS = [str,list,bool,dict]       #data types to be excepted when comparin
 
 class ControlState():
     def __init__(self):
-        self.drivetrain = drivetrain()
-        self.arm = arm()
+        self.drivetrain = Drivetrain()
+        self.arm = Arm()
 
         
         
