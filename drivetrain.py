@@ -1,7 +1,7 @@
-from roverVar import *
+from rovervar import *
 #------------------------------------Example of Drivetrain variables--------------------------------------------------
 
-class drivetrain():
+class Drivetrain():
     def __init__(self):
-        self.leftPower = roverVar(0,"lp")
-        self.rightPower = roverVar(0,"rp")
+        self.left_power = Rover_Var(0,"lp")
+        self.right_power = Rover_Var(0,"rp")
