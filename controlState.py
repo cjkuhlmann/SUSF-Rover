@@ -9,7 +9,11 @@ class controlState():
         self.drivetrain = drivetrain()
         self.arm = arm()
 
+        
+        
+#------------------------------------------------------------NETWORK ENCODER---------------------------------------------------------
 #COMMENTS TO BE ADDED XD
+
 def formatForSending(state):
     networkString = ""
     attributes = list(vars(state).keys())
@@ -27,6 +31,11 @@ def formatForSending(state):
     return networkString
 
 
+
+
+
+#--------------------------------------------------------DIFFERENTIAL CALCULATOR-----------------------------------------------------
+
 def calcStateDifferential(stateA,stateB):
     #gets a list containing all attribute identifiers for stateA (and therefore stateB as they are instances of the same class)
     attributes = list(vars(stateA).keys())
@@ -34,7 +43,7 @@ def calcStateDifferential(stateA,stateB):
     #for each attribute identifier
     for attributeNum in range (len(attributes)):    
         
-        currAttribute = getattr(stateA, attributes[attributeNum])#current attribute (so that we dont repeat too much code)
+        currAttribute = getattr(stateA, attributes[attributeNum])#gets the CONTENTS of the current attribute
         attrType = type(currAttribute) #gets type of attribute e.g. int, roverVar, str, etc.
         
         #if attribute is not a roverVar and is a userObject
@@ -48,7 +57,11 @@ def calcStateDifferential(stateA,stateB):
             setattr(stateA,attributes[attributeNum],currAttribute) #redefines the attribute to the new value
 
             
-#testing
+            
+            
+            
+            
+#---------------------------------------------------------------TESTING--------------------------------------------------------------
 stA = controlState()
 stB = controlState()
 
