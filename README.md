@@ -10,7 +10,7 @@ Pros
 Cons
 -Requires standardised variables
 -Requires exceptions if any variables stored in a command state are not to be compared or sent.
--Not data safe (doesn’t use get() and set() commands for custom data structures. This doesn’t really matter if ppl are careful when editing and setting variables )
+-Data directly accessed rather than through interface (doesn’t use get() and set() commands for custom data structures. This doesn’t really matter if ppl are careful when editing and setting variables )
 -Requires rover data to be integer of float in order to be compared
 
 
