@@ -65,9 +65,9 @@ def calc_state_differential(state_a,state_b):
 st_a = ControlState()
 st_b = ControlState()
 
-st_b.arm.armX.value = 5
+st_b.arm.arm_x.value = 5
 
 calc_state_differential(st_a,st_b)
 
-print(st_a.arm.armX.value)
+print(st_a.arm.arm_x.value)
 
