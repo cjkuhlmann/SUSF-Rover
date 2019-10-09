@@ -62,12 +62,12 @@ def calc_state_differential(state_a,state_b):
             
             
 #---------------------------------------------------------------TESTING--------------------------------------------------------------
-st_A = ControlState()
-st_B = ControlState()
+st_a = ControlState()
+st_b = ControlState()
 
-st_B.arm.armX.value = 5
+st_b.arm.armX.value = 5
 
-calc_state_differential(st_A,st_B)
+calc_state_differential(st_a,st_b)
 
-print(stA.arm.armX.value)
+print(st_a.arm.armX.value)
 
