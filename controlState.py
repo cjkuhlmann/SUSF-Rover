@@ -4,7 +4,7 @@ import time
 
 EXCEPTIONS = [str,list,bool,dict]       #data types to be excepted when comparing
 
-class controlState():
+class ControlState():
     def __init__(self):
         self.drivetrain = drivetrain()
         self.arm = arm()
@@ -14,21 +14,21 @@ class controlState():
 #------------------------------------------------------------NETWORK ENCODER---------------------------------------------------------
 #COMMENTS TO BE ADDED XD
 
-def formatForSending(state):
-    networkString = ""
+def format_for_sending(state):
+    network_string = ""
     attributes = list(vars(state).keys())
     
-    for attributeNum in range(len(attributes)):
-        currAttribute = getattr(state, attributes[attributeNum])
-        attrType = type(currAttribute)
+    for attribute_num in range(len(attributes)):
+        curr_attribute = getattr(state, attributes[attribute_num])
+        attr_type = type(curr_attribute)
         
-        if not isinstance(currAttribute, roverVar):
-            networkString += formatForSending(currAttribute)
+        if not isinstance(curr_attribute, roverVar):
+            network_string += format_for_sending(curr_attribute)
             
-        elif attrType != str:
-            networkString += currAttribute.name+str(currAttribute.value)+","
+        elif attr_type != str:
+            network_string += curr_attribute.name+str(curr_attribute.value)+","
             
-    return networkString
+    return network_string
 
 
 
@@ -36,25 +36,25 @@ def formatForSending(state):
 
 #--------------------------------------------------------DIFFERENTIAL CALCULATOR-----------------------------------------------------
 
-def calcStateDifferential(stateA,stateB):
-    #gets a list containing all attribute identifiers for stateA (and therefore stateB as they are instances of the same class)
-    attributes = list(vars(stateA).keys())
+def calc_state_differential(state_a,state_b):
+    #gets a list containing all attribute identifiers for state_a (and therefore state_b as they are instances of the same class)
+    attributes = list(vars(state_a).keys())
     
     #for each attribute identifier
-    for attributeNum in range (len(attributes)):    
+    for attribute_num in range (len(attributes)):    
         
-        currAttribute = getattr(stateA, attributes[attributeNum])#gets the CONTENTS of the current attribute
-        attrType = type(currAttribute) #gets type of attribute e.g. int, roverVar, str, etc.
+        curr_attribute = getattr(state_a, attributes[attribute_num])#gets the CONTENTS of the current attribute
+        attr_type = type(curr_attribute) #gets type of attribute e.g. int, roverVar, str, etc.
         
         #if attribute is not a roverVar and is a userObject
-        if not isinstance(currAttribute, roverVar) and attrType not in EXCEPTIONS: 
-            calcStateDifferential(currAttribute,getattr(stateB,attributes[attributeNum])) #recurse for found object
+        if not isinstance(curr_attribute, roverVar) and attr_type not in EXCEPTIONS: 
+            calc_state_differential(curr_attribute,getattr(state_b,attributes[attribute_num])) #recurse for found object
             
         #if attribute contains data we want to compare i.e. is a float or int in a roverVar
         else: 
-            differential = currAttribute.value - getattr(stateB,attributes[attributeNum]).value #calculates the difference
-            currAttribute.value = differential #sets the value of the attribute to the differential
-            setattr(stateA,attributes[attributeNum],currAttribute) #redefines the attribute to the new value
+            differential = curr_attribute.value - getattr(state_b,attributes[attribute_num]).value #calculates the difference
+            curr_attribute.value = differential #sets the value of the attribute to the differential
+            setattr(state_a,attributes[attribute_num],curr_attribute) #redefines the attribute to the new value
 
             
             
@@ -62,12 +62,12 @@ def calcStateDifferential(stateA,stateB):
             
             
 #---------------------------------------------------------------TESTING--------------------------------------------------------------
-stA = controlState()
-stB = controlState()
+st_A = ControlState()
+st_B = ControlState()
 
-stB.arm.armX.value = 5
+st_B.arm.armX.value = 5
 
-calcStateDifferential(stA,stB)
+calc_state_differential(st_A,st_B)
 
 print(stA.arm.armX.value)
 
