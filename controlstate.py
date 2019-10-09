@@ -12,7 +12,7 @@ class ControlState():
         
         
 # ------------------------------------------------------------NETWORK ENCODER---------------------------------------------------------
-# COMMENTS TO BE ADDED XD
+# COMMENTS TO BE ADDED :P
 
 def format_for_sending(state):
     network_string = ""
