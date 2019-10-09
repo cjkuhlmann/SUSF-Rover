@@ -22,7 +22,7 @@ def format_for_sending(state):
         curr_attribute = getattr(state, attributes[attribute_num])
         attr_type = type(curr_attribute)
         
-        if not isinstance(curr_attribute, roverVar):
+        if not isinstance(curr_attribute, RoverVar):
             network_string += format_for_sending(curr_attribute)
             
         elif attr_type != str:
@@ -47,7 +47,7 @@ def calc_state_differential(state_a,state_b):
         attr_type = type(curr_attribute) #gets type of attribute e.g. int, roverVar, str, etc.
         
         #if attribute is not a roverVar and is a userObject
-        if not isinstance(curr_attribute, roverVar) and attr_type not in EXCEPTIONS: 
+        if not isinstance(curr_attribute, RoverVar) and attr_type not in EXCEPTIONS: 
             calc_state_differential(curr_attribute,getattr(state_b,attributes[attribute_num])) #recurse for found object
             
         #if attribute contains data we want to compare i.e. is a float or int in a roverVar
