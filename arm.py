@@ -1,9 +1,9 @@
 from roverVar import *
 #--------------------------------example of arm variable--------------------------------------
-class arm():
+class Arm():
     def __init__(self):
-        self.grabberPower = roverVar(0,"gp")
-        self.armX = roverVar(0,"ax")
-        self.armY = roverVar(0,"ay")
-        self.armZ = roverVar(0,"az")
+        self.grabber_power = Rover_Var(0,"gp")
+        self.armX = Rover_Var(0,"ax")
+        self.armY = Rover_Var(0,"ay")
+        self.armZ = Rover_Var(0,"az")
         
