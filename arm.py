@@ -1,4 +1,4 @@
-from roverVar import *
+from rovervar import *
 #--------------------------------example of arm variable--------------------------------------
 class Arm():
     def __init__(self):
