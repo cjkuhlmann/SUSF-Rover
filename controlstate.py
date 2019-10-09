@@ -26,7 +26,7 @@ def format_for_sending(state):
             network_string += format_for_sending(curr_attribute)
             
         elif attr_type != str:
-            network_string += curr_attribute.name+str(curr_attribute.value)+","
+            network_string += curr_attribute.name + str(curr_attribute.value)+","
             
     return network_string
 
