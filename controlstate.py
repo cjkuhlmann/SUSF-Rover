@@ -1,80 +1,73 @@
-from arm import *
-from drivetrain import *
-import time
-
-EXCEPTIONS = [str,list,bool,dict]       #data types to be excepted when comparing
+class TreeNode():
+    def __init__(self,name):
+        self.left = 0
+        self.right = 0
+        self.value = 0
+        self.name = name
 
 class ControlState():
     def __init__(self):
-        self.drivetrain = Drivetrain()
-        self.arm = Arm()
+        self.nodes = []
+        self.root = None
 
-# ------------------------------------------------------------NETWORK ENCODER---------------------------------------------------------
-# COMMENTS TO BE ADDED :P
+    def create_root(self):
+        self.values = sorted(self.values, key=lambda k: k.name)  #sort names just for a nice tidy tree :) (but technically unrequired)
+        self.root = self.values[len(self.values)/2]
 
-def format_for_sending(state):
-    network_string = ""
-    attributes = list(vars(state).keys())
-
-    for attribute_num in range(len(attributes)):
-        curr_attribute = getattr(state, attributes[attribute_num])
-        attr_type = type(curr_attribute)
-
-        if not isinstance(curr_attribute, RoverVar):
-            network_string += format_for_sending(curr_attribute)
-
-        elif attr_type != str:
-            network_string += curr_attribute.name + str(curr_attribute.value) + ","
-
-    return network_string
+    #-----------------------------------------------------------ROBOT VARIABLE DEFINITION FUNCTION-------------------------------------------------------------
+    def define_robot_vars(self):
+        self.names = ["arm_up","arm_down","arm_grab", #NON-LOCAL VAR FOR GUI IMPLEMENTATION
+                "left_power","right_power"]
 
 
-# --------------------------------------------------------DIFFERENTIAL CALCULATOR-----------------------------------------------------
+        for name in self.names:
+            self.nodes.append(TreeNode(name))
 
-def calc_state_differential(state_a, state_b):
-    # gets a list containing all attribute identifiers for state_a (and therefore state_b as they are instances of
-    # the same class)
-    attributes = list(vars(state_a).keys())
+    #------------------------------------------------------------------CREATE NETWORK STRING-------------------------------------------------------------------
+    def create_network_string(self):
+        ourput = ""
+        for name in self.names:
+            value = find_replace(self.root,name)
+            if value != 0:
+                output += name + "," + str(value) + ";"
+            return output
 
-    # for each attribute identifier
-    for attribute_num in range(len(attributes)):
-
-        curr_attribute = getattr(state_a, attributes[attribute_num])  # gets the CONTENTS of the current attribute
-        attr_type = type(curr_attribute)  # gets type of attribute e.g. int, roverVar, str, etc.
-
-        # if attribute is not a roverVar and is a userObject
-        if not isinstance(curr_attribute, RoverVar) and attr_type not in EXCEPTIONS:
-            calc_state_differential(curr_attribute,
-                                    getattr(state_b, attributes[attribute_num]))  # recurse for found object
-
-        # if attribute contains data we want to compare i.e. is a float or int in a roverVar
+#-----------------------------------------------------------SEARCH AND REPLACE FUNCTION FOR BINARY TREE--------------------------------------------------------
+def find_replace(node,name,value = None):
+    #base case when the node is found
+    if node.name == name:
+        if value == None:
+            output = node.value  #if in find mode
         else:
-            differential = curr_attribute.value - getattr(state_b,
-                                                          attributes[attribute_num]).value  # calculates the difference
-            curr_attribute.value = differential  # sets the value of the attribute to the differential
-            setattr(state_a, attributes[attribute_num], curr_attribute)  # redefines the attribute to the new value
+            node.value = value  #if in replace mode
 
+    if name <= node.name:
+        output = find_replace(node.left,name,value)  #carries the foudn value through the callstack
+    else:
+        output = find_replace(node.right,name,value)   #carries the foudn value through the callstack
 
-# --------------------------------------------------------OVERWRITE CONTROL STATE-----------------------------------------------------
+    return output; #returns the found value
 
-def overwrite_control_state(state_a, state_b):
-    attributes = list(vars(state_a).keys())
-    for attribute_num in range(len(attributes)):
-        curr_attribute = getattr(state_a, attributes[attribute_num])
-        attr_type = type(curr_attribute)
-        if not isinstance(curr_attribute, RoverVar) and attr_type not in EXCEPTIONS:
-            overwrite_control_state(curr_attribute,
-                                    getattr(state_b, attributes[attribute_num]))
+#---------------------------------------------------------------------CONSTRUCTION OF BINARY TREE--------------------------------------------------------------
+def traverse_and_create(node,item):
+    if item.name <= node.name:
+        if node.left == None:
+            node.left = item
         else:
-            setattr(state_a, attributes[attribute_num], getattr(state_b, attributes[attribute_num])))  # overwrites state_a's value with state_b's value
+            traverse_and_create(node.left,item)
+    else:
+        if node.right == None:
+            node.right = item
+        else:
+            traverse_and_create(node.right,item)
 
 
-# ---------------------------------------------------------------TESTING--------------------------------------------------------------
-st_a = ControlState()
-st_b = ControlState()
-
-st_b.arm.arm_x.value = 5
-
-calc_state_differential(st_a,st_b)
-
-print(st_a.arm.arm_x.value)
+#---------------------------------------------------------------------CALCULATE STATE DIFFERENTIAL--------------------------------------------------------------
+#replaces values in new_state with the differentials and the values in the old state with the values in the new state
+def calculate_state_differential(new_state,old_state):
+    for name in self.names:
+        old_val = find_replace(old_state.root,name)
+        new_val = find_replace(new_state.root,name)
+        differential = old_val - new_val
+        find_replace(old_state.root,name,new_val)
+        find_replace(new_state.root,name,differential)
