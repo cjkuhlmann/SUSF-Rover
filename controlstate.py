@@ -25,7 +25,7 @@ class ControlState():
 
     #------------------------------------------------------------------CREATE NETWORK STRING-------------------------------------------------------------------
     def create_network_string(self):
-        ourput = ""
+        output = ""
         for name in self.names:
             value = find_replace(self.root,name)
             if value != 0:
