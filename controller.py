@@ -1,9 +1,6 @@
 class Controller():
     def __init__(self):
-
-        """
-            INSERT gamepad code e.g. linked controller etc.
-        """
+        
         self.linked_state = None
 
         self.system_values = {'ABS_Y': 0, 'ABS_X': 0, 'ABS_Z': 0, 'BTN_THUMBL': 0,  # left stick
@@ -56,14 +53,14 @@ class Controller():
                                  "select": None
                                  }
 
+
         def linked_to_control_state(self,state):
             self.linked_state = state
 
         def update_linked_control_state(self,state):
-            for key,value in self.controller_bindings:
+            for key,value in self.controller_values:
                 if value != None:
-                    self.linked_state.set_value(value,self.controller_values[key])
-
+                    self.linked_state.find_replace(control_bindings[key],value)
 
 
         def update(self):
