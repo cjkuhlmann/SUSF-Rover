@@ -9,8 +9,6 @@ class ControlState():
         self.drivetrain = Drivetrain()
         self.arm = Arm()
 
-        
-        
 # ------------------------------------------------------------NETWORK ENCODER---------------------------------------------------------
 # COMMENTS TO BE ADDED :P
 
@@ -57,6 +55,20 @@ def calc_state_differential(state_a, state_b):
             setattr(state_a, attributes[attribute_num], curr_attribute)  # redefines the attribute to the new value
 
 
+# --------------------------------------------------------OVERWRITE CONTROL STATE-----------------------------------------------------
+
+def overwrite_control_state(state_a, state_b):
+    attributes = list(vars(state_a).keys())
+    for attribute_num in range(len(attributes)):
+        curr_attribute = getattr(state_a, attributes[attribute_num])
+        attr_type = type(curr_attribute)
+        if not isinstance(curr_attribute, RoverVar) and attr_type not in EXCEPTIONS:
+            overwrite_control_state(curr_attribute,
+                                    getattr(state_b, attributes[attribute_num]))
+        else:
+            setattr(state_a, attributes[attribute_num], getattr(state_b, attributes[attribute_num])))  # overwrites state_a's value with state_b's value
+
+
 # ---------------------------------------------------------------TESTING--------------------------------------------------------------
 st_a = ControlState()
 st_b = ControlState()
@@ -66,4 +78,3 @@ st_b.arm.arm_x.value = 5
 calc_state_differential(st_a,st_b)
 
 print(st_a.arm.arm_x.value)
-
