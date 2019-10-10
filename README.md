@@ -11,7 +11,7 @@ Still need to implement pre-, in- and post- oder traversals although they may no
 
 ```python    #------------------------------------------------------------------CREATE NETWORK STRING-------------------------------------
     def create_network_string(self):
-        ourput = ""
+        output = ""
         for name in self.names:
             value = find_replace(self.root,name)
             if value != 0:
