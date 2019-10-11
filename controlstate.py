@@ -49,7 +49,6 @@ class ControlState():
 #-----------------------------------------------------------SEARCH AND REPLACE FUNCTION FOR BINARY TREE--------------------------------------------------------
 def find_replace(node,name,value = None):
     #base case when the node is found
-    print(node.name,name)
     if node.name == name:
         if value == None:
             output = node.value  #if in find mode
