@@ -1,8 +1,8 @@
 # class to function as both variables for rover and nodes in the tree
 class TreeNode():
     def __init__(self,name):
-        self.left = 0
-        self.right = 0
+        self.left = None
+        self.right = None
         self.value = 0
         self.name = name
 
@@ -13,18 +13,27 @@ class ControlState():
         self.root = None
         self.network_string = ""
 
-    def create_root(self):
-        self.values = sorted(self.values, key=lambda k: k.name)  #sort names just for a nice tidy tree :) (but technically unrequired)
-        self.root = self.values[len(self.values)/2]
+    def create_tree(self):
+        self.define_robot_vars()
+        self.nodes  = sorted(self.nodes, key=lambda k: k.name)  #sort names just for a nice tidy tree :) (but technically unrequired)
+        prepared_nodes = cut_and_order(self.nodes)
+        self.root = prepared_nodes[0]
+        prepared_nodes = prepared_nodes[1:]
 
-    #-----------------------------------------------------------ROBOT VARIABLE DEFINITION FUNCTION-------------------------------------------------------------
+
+        for node in prepared_nodes:
+            traverse_and_create(self.root,node)
+
+
+   #-----------------------------------------------------------ROBOT VARIABLE DEFINITION FUNCTION-------------------------------------------------------------
     def define_robot_vars(self):
         self.names = ["arm_up","arm_down","arm_grab", #NON-LOCAL VAR FOR GUI IMPLEMENTATION
                 "left_power","right_power"]
 
-
         for name in self.names:
             self.nodes.append(TreeNode(name))
+
+
 
     #------------------------------------------------------------------CREATE NETWORK STRING-------------------------------------------------------------------
     #Could replace with a tree traversal e.g. in-order traversal. More efficient but would require rewriting seach or making a new function
@@ -36,31 +45,6 @@ class ControlState():
                 output += name + "," + str(value) + ";"
             return output
 
-
-    """
-    def send_network_string(self):
-        self.network_string = ""
-        self.create_network_string(self.root)
-        self.send_network_string()
-
-    def send_mnetwork_string(self)
-    #CODE TO SEND STRING TO network_string
-
-
-
-    
-    IN-ORDER SEARCH DEVELOPMENT
-
-    def create_network_string(self,node):
-        if node.left != None:
-            create_network_string(self,node.left)
-        if node.right != None:
-            create_network_string(self,noce.right)
-        self.network_string += node.name + "," + str(node.value) + ";"
-
-
-
-    """
 
 #-----------------------------------------------------------SEARCH AND REPLACE FUNCTION FOR BINARY TREE--------------------------------------------------------
 def find_replace(node,name,value = None):
@@ -92,6 +76,7 @@ def traverse_and_create(node,item):
             traverse_and_create(node.right,item)
 
 
+
 #---------------------------------------------------------------------CALCULATE STATE DIFFERENTIAL--------------------------------------------------------------
 #replaces values in new_state with the differentials and the values in the old state with the values in the new state
 def calculate_state_differential(new_state,old_state):
@@ -101,3 +86,26 @@ def calculate_state_differential(new_state,old_state):
         differential = old_val - new_val
         find_replace(old_state.root,name,new_val)
         find_replace(new_state.root,name,differential)
+
+#----------------------------------------------------------------PREPARE LIST FOR TREE CREATION-----------------------------------------------------------------
+def cut_and_order(input_list):
+    output_list = []
+    if len(input_list) <= 2:
+        return input_list
+
+    middle = int(len(input_list)/2)
+    left_list = input_list[:middle]
+    right_list = input_list[middle+1:]
+
+    middle = [input_list[middle]]
+
+    output_list += cut_and_order(left_list)
+    output_list += cut_and_order(right_list)
+
+    return middle+output_list
+
+
+
+
+control_state_new = ControlState()
+control_state_new.create_tree()
