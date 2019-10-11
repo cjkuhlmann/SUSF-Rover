@@ -49,11 +49,14 @@ class ControlState():
 #-----------------------------------------------------------SEARCH AND REPLACE FUNCTION FOR BINARY TREE--------------------------------------------------------
 def find_replace(node,name,value = None):
     #base case when the node is found
+    print(node.name,name)
     if node.name == name:
         if value == None:
             output = node.value  #if in find mode
+            return output
         else:
             node.value = value  #if in replace mode
+            return
 
     if name <= node.name:
         output = find_replace(node.left,name,value)  #carries the foudn value through the callstack
@@ -80,7 +83,7 @@ def traverse_and_create(node,item):
 #---------------------------------------------------------------------CALCULATE STATE DIFFERENTIAL--------------------------------------------------------------
 #replaces values in new_state with the differentials and the values in the old state with the values in the new state
 def calculate_state_differential(new_state,old_state):
-    for name in self.names:
+    for name in new_state.names:
         old_val = find_replace(old_state.root,name)
         new_val = find_replace(new_state.root,name)
         differential = old_val - new_val
@@ -109,3 +112,8 @@ def cut_and_order(input_list):
 
 control_state_new = ControlState()
 control_state_new.create_tree()
+
+control_state_old = ControlState()
+control_state_old.create_tree()
+
+calculate_state_differential(control_state_new,control_state_old)
