@@ -1,3 +1,4 @@
+# class to function as both variables for rover and nodes in the tree
 class TreeNode():
     def __init__(self,name):
         self.left = 0
@@ -5,10 +6,12 @@ class TreeNode():
         self.value = 0
         self.name = name
 
+#Control state class to hold all variables for the rover
 class ControlState():
     def __init__(self):
         self.nodes = []
         self.root = None
+        self.network_string = ""
 
     def create_root(self):
         self.values = sorted(self.values, key=lambda k: k.name)  #sort names just for a nice tidy tree :) (but technically unrequired)
@@ -24,6 +27,7 @@ class ControlState():
             self.nodes.append(TreeNode(name))
 
     #------------------------------------------------------------------CREATE NETWORK STRING-------------------------------------------------------------------
+    #Could replace with a tree traversal e.g. in-order traversal. More efficient but would require rewriting seach or making a new function
     def create_network_string(self):
         output = ""
         for name in self.names:
@@ -31,6 +35,32 @@ class ControlState():
             if value != 0:
                 output += name + "," + str(value) + ";"
             return output
+
+
+    """
+    def send_network_string(self):
+        self.network_string = ""
+        self.create_network_string(self.root)
+        self.send_network_string()
+
+    def send_mnetwork_string(self)
+    #CODE TO SEND STRING TO network_string
+
+
+
+    
+    IN-ORDER SEARCH DEVELOPMENT
+
+    def create_network_string(self,node):
+        if node.left != None:
+            create_network_string(self,node.left)
+        if node.right != None:
+            create_network_string(self,noce.right)
+        self.network_string += node.name + "," + str(node.value) + ";"
+
+
+
+    """
 
 #-----------------------------------------------------------SEARCH AND REPLACE FUNCTION FOR BINARY TREE--------------------------------------------------------
 def find_replace(node,name,value = None):
