@@ -11,7 +11,7 @@ class Controller():
                        'BTN_WEST': 0, 'BTN_SOUTH': 0, 'BTN_EAST': 0, 'BTN_NORTH': 0  # buttons
                       }
         #syetem inputs converted to understandable inputs
-        self.controller_values = {"left_stick_x": None,
+        self.input_values = {"left_stick_x": None,
                                 "left_stick_y": None,
                                 "right_stick_x": None,
                                 "right_stick_x": None,
@@ -53,7 +53,9 @@ class Controller():
                                  "select": None
                                  }
 
-
+        def get_inputs(self):
+            return self.input_values
+        
         def update(self):
             self.update_controller()
             self.update_values()
