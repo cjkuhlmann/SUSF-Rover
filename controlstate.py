@@ -11,6 +11,7 @@ class ControlState():
     def __init__(self):
         self.nodes = []
         self.root = None
+        self.input_devices = []
         self.network_string = ""
 
     def create_tree(self):
@@ -44,7 +45,13 @@ class ControlState():
             if value != 0:
                 output += name + "," + str(value) + ";"
             return output
-
+#-----------------------------------------------------------GET INPUTS FROM CONNECTED INPUT DEVICES-------------------------------------------------------------
+    def update_values(self):
+        for input_source in self.input_devices:
+            for key,value in input_source.get_inputs():
+                if value != None:
+                    self.linked_state.find_replace(control_bindings[key],value)
+                    
 
 #-----------------------------------------------------------SEARCH AND REPLACE FUNCTION FOR BINARY TREE--------------------------------------------------------
 def find_replace(node,name,value = None):
@@ -105,6 +112,10 @@ def cut_and_order(input_list):
     output_list += cut_and_order(right_list)
 
     return middle+output_list
+
+
+    def linked_to_control_state(self,state):
+        self.linked_state = state
 
 
 
