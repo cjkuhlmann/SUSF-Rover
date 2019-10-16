@@ -5,3 +5,4 @@ I have no idea whether this is better but binary trees by nature are quite effic
 The tree also allows efficient searching of data and easy fina and replacement of it.
 Additionally since all variable names are stored in the control state modification of keymappings will
 be quite easy in a gui and so will being able to get all data from the tree.
+
