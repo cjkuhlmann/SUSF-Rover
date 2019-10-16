@@ -54,15 +54,6 @@ class Controller():
                                  }
 
 
-        def linked_to_control_state(self,state):
-            self.linked_state = state
-
-        def update_linked_control_state(self,state):
-            for key,value in self.controller_values:
-                if value != None:
-                    self.linked_state.find_replace(control_bindings[key],value)
-
-
         def update(self):
             self.update_controller()
             self.update_values()
