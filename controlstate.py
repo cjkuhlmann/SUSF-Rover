@@ -29,7 +29,7 @@ class ControlState():
    #-----------------------------------------------------------ROBOT VARIABLE DEFINITION FUNCTION-------------------------------------------------------------
     def define_robot_vars(self):
         self.names = ["arm_up","arm_down","arm_grab", #NON-LOCAL VAR FOR GUI IMPLEMENTATION
-                "left_power","right_power"]
+                "curvature","rotation_rate", "speed"]
 
         for name in self.names:
             self.nodes.append(TreeNode(name))
