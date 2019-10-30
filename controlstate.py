@@ -50,7 +50,11 @@ class ControlState():
         for input_source in self.input_devices:
             for key,value in input_source.get_inputs():
                 if value != None:
-                    self.linked_state.find_replace(control_bindings[key],value)
+                    if type(value) == list:
+                        for v in value:
+                            self.linked_state.find_replace(control_bindings[key],v)
+                    else:
+                        self.linked_state.find_replace(control_bindings[key],value)
                     
 
 #-----------------------------------------------------------SEARCH AND REPLACE FUNCTION FOR BINARY TREE--------------------------------------------------------
